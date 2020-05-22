@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper   
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"   
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wxy.mapper.InfoMapper">
+	<update id="updateInfo">
+		update t_info set status=1,uptime=now() where id=#{id}
+	</update>
+	<insert id="insertInfo">
+		insert into t_info(name,uptime,status,tid)
+		values
+		(#{name},now(),0,#{tid})
+	</insert>
+	<select id="queryById" resultType="com.wxy.beans.Info">
+		select * from t_info where id=#{id}
+	</select>
+	<select id="queryAll" resultType="com.wxy.beans.Info">
+		SELECT 
+		  i.*,
+		  t.tname 
+		FROM
+		  t_info i 
+		  LEFT JOIN t_teacher t 
+		    ON i.`tid` = t.`tid` 
+		<where>
+			<if test="name != null and name != ''">
+				and name=#{name}
+			</if>
+			<if test="status != null">
+				and status=#{status}
+			</if>
+			<if test="tname != null and tname != ''">
+				and tname=#{tname}
+			</if>
+		</where>
+	</select>
+	<select id="queryTeacherAll" resultType="com.wxy.beans.Teacher">
+		select * from t_teacher
+	</select>
+</mapper>
